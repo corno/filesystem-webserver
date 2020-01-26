@@ -1,0 +1,19 @@
+{
+  "name": "filesystem-webserver",
+  "version": "0.0.1",
+  "description": "webserver that servers static files over http and a data directory via web sockets",
+  "dependencies": {
+    "express": "^4.15.2",
+    "glob": "^7.1.6",
+    "socket.io": "^1.7.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.2",
+    "@types/glob": "^7.1.1",
+    "@types/socket.io": "^2.1.4",
+    "typescript": "^3.7.5"
+  },
+  "scripts": {
+    "start": "node dist/index.js"
+  }
+}
