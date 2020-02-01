@@ -17,7 +17,7 @@
   },
   "files": [
     "./cli.js",
-    "./dist"
+    "./dist/"
   ],
   "license": "ISC",
   "name": "filesystem-webserver",
