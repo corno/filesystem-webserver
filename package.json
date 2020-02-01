@@ -15,6 +15,10 @@
     "tslint": "^6.0.0",
     "typescript": "^3.7.5"
   },
+  "files": [
+    "./cli.js",
+    "./dist"
+  ],
   "license": "ISC",
   "name": "filesystem-webserver",
   "repository": {
