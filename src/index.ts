@@ -1,3 +1,4 @@
+// tslint:disable: no-console
 import express from "express"
 import * as http from "http"
 import * as path from "path"
@@ -47,7 +48,7 @@ function addDir(prefix: string, dir: string) {
 addDir("data",path.resolve(datadir))
 addDir("static", path.resolve(staticdir))
 
-httpServer.listen(port, function () {
+httpServer.listen(port, () => {
     console.log('listening on *:' + port)
 })
 
@@ -59,7 +60,7 @@ const ioWrapper: ISocketServer = {
         io.on("connection", s => {
             callback(s)
         })
-    }
+    },
 }
 
 new HandleCommands(ioWrapper, datadir).handleCommands()
