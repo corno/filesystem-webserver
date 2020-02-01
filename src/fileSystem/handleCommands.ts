@@ -32,7 +32,7 @@ export class HandleCommands {
                 const renameData: RenameData = JSON.parse(msg)
                 this.createPath(renameData.old, old => {
                     this.createPath(renameData.new, newP => {
-                        fs.rename(old, newP, (err) => {
+                        fs.rename(old, newP, err => {
                             if (err) {
                                 console.error(err)
                             }
