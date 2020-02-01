@@ -16,8 +16,8 @@
     "typescript": "^3.7.5"
   },
   "files": [
-    "./cli.js",
-    "./dist/"
+    "cli.js",
+    "dist"
   ],
   "license": "ISC",
   "name": "filesystem-webserver",
