@@ -1,4 +1,7 @@
 {
+  "bin": {
+    "start-server": "./cli.js"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "glob": "^7.1.6",
