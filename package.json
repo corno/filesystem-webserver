@@ -44,5 +44,5 @@
     "u2l": "ncu -u --packageFile package.json && nsi",
     "validatePublishReadiness": "git diff --exit-code && ncu -u --packageFile package.json && npm install && npm run buildLintAndTest"
   },
-  "version": "0.1.4"
+  "version": "0.1.5"
 }
