@@ -22,8 +22,8 @@ export class HandleCommands {
     socketServer: ISocketServer
     datadir: string
     constructor(io: ISocketServer, datadir: string) {
-        this.socketServer = io,
-            this.datadir = datadir
+        this.socketServer = io
+        this.datadir = datadir
     }
     public handleCommands() {
 
@@ -60,7 +60,7 @@ export class HandleCommands {
         if (normalizedDir.startsWith("..")) {
             console.error("path outside of context")
         }
-        callback( path.join(this.datadir, np))
+        callback(path.join(this.datadir, np))
     }
     private createPath(np: NodePath, callback: (path: string) => void) {
         this.createPath2(path.join(np.dir, np.base), callback)

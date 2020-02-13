@@ -1,4 +1,6 @@
-// tslint:disable: no-console
+/* eslint
+    no-console:"off",
+*/
 import express from "express"
 import * as http from "http"
 import * as path from "path"

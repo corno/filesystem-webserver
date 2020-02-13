@@ -9,9 +9,17 @@
   },
   "description": "webserver that servers static files over http and a data directory via web sockets",
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.19.2",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.19.2",
+    "@typescript-eslint/parser": "^2.19.2",
     "@types/express": "^4.17.2",
     "@types/glob": "^7.1.1",
+    "@types/mocha": "^7.0.1",
+    "@types/node": "^13.7.1",
     "@types/socket.io": "^2.1.4",
+    "eslint": "^6.8.0",
+    "mocha": "^7.0.1",
+    "should": "13.2.x",
     "tslint": "^6.0.0",
     "typescript": "^3.7.5"
   },
@@ -28,7 +36,7 @@
   "scripts": {
     "build": "mkdir .\\dist & rd /s /q .\\dist && tsc",
     "buildLintAndTest": "npm run build && npm run lint && npm run test",
-    "lint": "tslint --project tsconfig.json",
+    "lint": "node .\\node_modules\\eslint\\bin\\eslint.js src/**/*.ts",
     "pubMin": "npm run validatePublishReadiness && npm version minor && git push && npm publish",
     "pubPatch": "npm run validatePublishReadiness && npm version patch && git push && npm publish",
     "start": "node dist/index.js",

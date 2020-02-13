@@ -1,4 +1,6 @@
-// tslint:disable: no-console
+/* eslint
+    no-console:"off",
+*/
 import * as fs from "fs"
 import glob from "glob"
 import * as path from "path"
@@ -67,7 +69,7 @@ export class PushFileSystem {
         return {
             dir: parsed.dir,
             base: parsed.base,
-            type: nodePath[nodePath.length - 1] === "/"
+            type: nodePath.endsWith("/")
                 ? ["dir", {
                     globalID: nodePath.substr(0, nodePath.length - 1), //strip the trailing slash
                 }]
