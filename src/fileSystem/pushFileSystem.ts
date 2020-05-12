@@ -38,24 +38,29 @@ export class PushFileSystem {
             }
             console.log("raw nodes")
             console.log(rawNodes)
-            const first = rawNodes[0]
-            if (path.relative(this.datadir, first) !== "") {
-                console.log(first)
-                console.log(this.resolvedDataDir)
-                throw new Error("expected the first entry to be the root")
+            if (rawNodes.length === 0) {
+                console.error("no items in directory")
+                callback([])
+            } else {
+                const first = rawNodes[0]
+                if (path.relative(this.datadir, first) !== "") {
+                    console.log(first)
+                    console.log(this.resolvedDataDir)
+                    throw new Error("expected the first entry to be the root")
+                }
+                callback(rawNodes
+                    .slice(1, rawNodes.length)
+                    .map(rm => {
+                        if (!rm.startsWith(first)) {
+                            throw new Error("entry does not start with expected root")
+                        }
+                        return rm.substring(first.length)
+                    })
+                    .sort((a, b) => {
+                        return a.localeCompare(b)
+                    })
+                )
             }
-            callback(rawNodes
-                .slice(1, rawNodes.length)
-                .map(rm => {
-                    if (!rm.startsWith(first)) {
-                        throw new Error("entry does not start with expected root")
-                    }
-                    return rm.substring(first.length)
-                })
-                .sort((a, b) => {
-                    return a.localeCompare(b)
-                })
-            )
         })
     }
 

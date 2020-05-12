@@ -2,10 +2,15 @@
     no-console:"off",
 */
 import express from "express"
+import * as fs from "fs"
 import * as http from "http"
 import * as path from "path"
 import socketio from "socket.io"
 import { HandleCommands, ISocketServer, PushFileSystem } from "./fileSystem"
+
+function directoryExists(dirPath: string) {
+    return fs.existsSync(dirPath) && fs.lstatSync(dirPath).isDirectory()
+}
 
 export function startWebserver(port: number) {
 
@@ -19,9 +24,17 @@ export function startWebserver(port: number) {
         console.error(`format: ${node} ${script}, <staticdir> <datadir>`)
         process.exit(1)
     }
+    if (!directoryExists(staticdir)) {
+        console.error(`static directory ${staticdir} does not exist`)
+        process.exit(1)
+    }
 
     if (datadir === undefined) {
         console.error(`format: ${node} ${script}, <staticdir> <datadir>`)
+        process.exit(1)
+    }
+    if (!directoryExists(datadir)) {
+        console.error(`data directory ${datadir} does not exist`)
         process.exit(1)
     }
 
