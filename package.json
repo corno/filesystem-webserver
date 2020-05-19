@@ -5,6 +5,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "glob": "^7.1.6",
+    "pareto": "^0.27.3",
     "socket.io": "^2.3.0"
   },
   "description": "webserver that servers static files over http and a data directory via web sockets",
@@ -38,7 +39,7 @@
     "lint": "node ./node_modules/eslint/bin/eslint.js src/**/*.ts",
     "pubMin": "npm run validatePublishReadiness && npm version minor && git push && npm publish",
     "pubPatch": "npm run validatePublishReadiness && npm version patch && git push && npm publish",
-    "start": "node dist/bin/cli.js ./test/staticdir ./test/datadir",
+    "start": "npm run build && node dist/bin/cli.js ./test/staticdir ./test/datadir",
     "test": "tsc && node ./dist/test",
     "update2latest": "ncu -u --packageFile package.json && nsi",
     "validatePublishReadiness": "git diff --exit-code && ncu -u --packageFile package.json && npm install && npm run buildLintAndTest"

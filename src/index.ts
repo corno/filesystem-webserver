@@ -4,9 +4,11 @@
 import express from "express"
 import * as fs from "fs"
 import * as http from "http"
+import * as url from "url"
 import * as path from "path"
 import socketio from "socket.io"
 import { HandleCommands, ISocketServer, PushFileSystem } from "./fileSystem"
+import { makeHTTPrequest } from "./makeHTTPrequest"
 
 function directoryExists(dirPath: string) {
     return fs.existsSync(dirPath) && fs.lstatSync(dirPath).isDirectory()
@@ -48,20 +50,67 @@ export function startWebserver(port: number) {
         res.redirect("/static/favicon.ico")
     })
 
-    function addDir(prefix: string, dir: string) {
-        app.get(`/${prefix}/*`, (req, res) => {
-            const normalizedURL = path.normalize(req.url.substr(`/${prefix}`.length))
-            if (normalizedURL.startsWith("..")) {
-                res.statusCode = 403
-                res.sendFile(path.resolve('notAllowed.html'))
-            } else {
-                res.sendFile(path.resolve(path.join(dir, decodeURIComponent(normalizedURL))))
-            }
+    function addAppGet(
+        prefix: string,
+        callback: (
+            res: express.Response,
+            normalizedURL: string
+        ) => void,
+    ) {
+        const prefixWithSlashes = `/${prefix}/`
+        app.get(`${prefixWithSlashes}*`, (req, res) => {
+            const normalizedURL = path.normalize(req.url.substr(`${prefixWithSlashes}`.length))
+            callback(res, normalizedURL)
         })
+    }
+
+    function addDir(prefix: string, dir: string) {
+        addAppGet(
+            prefix,
+            (res, normalizedURL) => {
+                if (normalizedURL.startsWith("..")) {
+                    res.statusCode = 403
+                    res.sendFile(path.resolve('notAllowed.html'))
+                } else {
+                    res.sendFile(path.resolve(path.join(dir, decodeURIComponent(normalizedURL))))
+                }
+            }
+        )
     }
 
     addDir("data", path.resolve(datadir))
     addDir("static", path.resolve(staticdir))
+
+    addAppGet(
+        "http",
+        (res, normalizedURL) => {
+            const parsedURL = url.parse("http://" + normalizedURL)
+            console.log(normalizedURL)
+            console.log(parsedURL.host, parsedURL.path)
+            makeHTTPrequest({
+                host: parsedURL.host,
+                path: parsedURL.path,
+            }).handleUnsafePromise(
+                _error => {
+                    res.statusCode = 404
+                    res.sendFile(path.resolve('urlNotFound.html'))
+                },
+                stream => {
+                    let allData = ""
+                    stream.processStream(
+                        null,
+                        data => {
+                            allData += data
+                        },
+                        () => {
+                            console.log("SENDING")
+                            res.send(allData)
+                        }
+                    )
+                }
+            )
+        }
+    )
 
     httpServer.listen(port, () => {
         console.log('listening on *:' + port)
