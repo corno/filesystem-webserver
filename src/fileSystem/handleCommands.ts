@@ -25,11 +25,11 @@ export class HandleCommands {
         this.socketServer = io
         this.datadir = datadir
     }
-    public handleCommands() {
+    public handleCommands(): void {
 
         this.socketServer.onConnection(socket => {
             socket.on('rename', msg => {
-                const renameData: RenameData = JSON.parse(msg)
+                const renameData: RenameData = JSON.parse(msg) //eslint-disable-line
                 this.createPath(renameData.old, old => {
                     this.createPath(renameData.new, newP => {
                         fs.rename(old, newP, err => {
@@ -43,7 +43,7 @@ export class HandleCommands {
             })
 
             socket.on('save-file', msg => {
-                const saveData: SaveData = JSON.parse(msg)
+                const saveData: SaveData = JSON.parse(msg) //eslint-disable-line
                 this.createPath2(saveData.fullpath, thePath => {
                     fs.writeFile(thePath, saveData.data, err => {
                         if (err) {

@@ -81,7 +81,7 @@ export class PushFileSystem {
                 : ["file"],
         }
     }
-    public pushFileSystem() {
+    public pushFileSystem(): void {
 
 
         this.getNodes(nodes => {
