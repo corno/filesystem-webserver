@@ -6,15 +6,16 @@ import * as fs from "fs"
 import * as http from "http"
 import * as url from "url"
 import * as path from "path"
+import * as p from "pareto"
 import socketio from "socket.io"
+import * as phttp from "pareto-20/dist/src/http/makeNativeHTTPrequest"
 import { HandleCommands, ISocketServer, PushFileSystem } from "./fileSystem"
-import { makeHTTPrequest } from "./makeHTTPrequest"
 
 function directoryExists(dirPath: string) {
     return fs.existsSync(dirPath) && fs.lstatSync(dirPath).isDirectory()
 }
 
-export function startWebserver(port: number) {
+export function startWebserver(port: number): void {
 
     const app = express()
     const httpServer = http.createServer(app)
@@ -87,24 +88,31 @@ export function startWebserver(port: number) {
             const parsedURL = url.parse("http://" + normalizedURL)
             console.log(normalizedURL)
             console.log(parsedURL.host, parsedURL.path)
-            makeHTTPrequest({
+            if (parsedURL.host === null || parsedURL.path === null) {
+                throw new Error("missing http host and/or path")
+            }
+            phttp.makeNativeHTTPrequest({
                 host: parsedURL.host,
                 path: parsedURL.path,
-            }).handleUnsafePromise(
+                timeout: 2000,
+            }).handle(
                 _error => {
                     res.statusCode = 404
                     res.sendFile(path.resolve('urlNotFound.html'))
                 },
                 stream => {
                     let allData = ""
-                    stream.processStream(
+                    stream.handle(
                         null,
-                        data => {
-                            allData += data
-                        },
-                        () => {
-                            console.log("SENDING")
-                            res.send(allData)
+                        {
+                            onData: data => {
+                                allData += data
+                                return p.result(false)
+                            },
+                            onEnd: () => {
+                                console.log("SENDING")
+                                res.send(allData)
+                            },
                         }
                     )
                 }
@@ -113,7 +121,7 @@ export function startWebserver(port: number) {
     )
 
     httpServer.listen(port, () => {
-        console.log('listening on *:' + port)
+        console.log(`listening on *: ${port}`)
     })
 
     const ioWrapper: ISocketServer = {
