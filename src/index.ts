@@ -8,7 +8,7 @@ import * as url from "url"
 import * as path from "path"
 import * as p from "pareto"
 import socketio from "socket.io"
-import * as phttp from "pareto-20/dist/src/http/makeNativeHTTPrequest"
+import * as phttp from "./makeNativeHTTPrequest"
 import { HandleCommands, ISocketServer, PushFileSystem } from "./fileSystem"
 
 function directoryExists(dirPath: string) {

@@ -5,7 +5,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "glob": "^7.1.6",
-    "pareto": "^0.47.0",
+    "pareto": "^0.48.0",
     "socket.io": "^3.0.5"
   },
   "description": "webserver that servers static files over http and a data directory via web sockets",
