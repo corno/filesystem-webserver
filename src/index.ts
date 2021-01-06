@@ -19,7 +19,7 @@ export function startWebserver(port: number): void {
 
     const app = express()
     const httpServer = http.createServer(app)
-    const io = socketio(httpServer)
+    const io = new socketio.Server(httpServer)
 
     const [node, script, staticdir, datadir] = process.argv
 
