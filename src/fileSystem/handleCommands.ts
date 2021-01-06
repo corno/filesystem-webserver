@@ -55,14 +55,14 @@ export class HandleCommands {
 
         })
     }
-    private createPath2(np: string, callback: (path: string) => void) {
+    private createPath2(np: string, callback: (pathString: string) => void) {
         const normalizedDir = path.normalize(np)
         if (normalizedDir.startsWith("..")) {
             console.error("path outside of context")
         }
         callback(path.join(this.datadir, np))
     }
-    private createPath(np: NodePath, callback: (path: string) => void) {
+    private createPath(np: NodePath, callback: (pathString: string) => void) {
         this.createPath2(path.join(np.dir, np.base), callback)
     }
 }
